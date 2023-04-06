@@ -1,35 +1,13 @@
-version: '3.2'
-
+version: "3"
 services:
   csvserver:
-    image: 'infracloudio/csvserver:latest'
-    container_name: 'csvserver'
-    ports:
-      - '9393:9300'
-    hostname: csvserver
-    volumes:
-      - './inputFile:/csvserver/inputdata'
+    image: infracloudio/csvserver:latest
+    container_name: csvserver
     environment:
-      - CSVSERVER_BORDER=Orange
-    command: ./csvserver
-    #network_mode: bridge
-    networks:
-      - bridge
-    restart: always
-
-  prometheus:
-    image: prom/prometheus:v2.22.0
-    container_name: 'prometheus'
-    ports:
-      - '9090:9090'
-    command:
-      - --config.file=/etc/prometheus/prometheus.yml
+      - CSVSERVER_BORDER=${CSVSERVER_BORDER}
     volumes:
-      - './prometheus.yml:/etc/prometheus/prometheus.yml'
-    networks:
-      - bridge
-    restart: always
-
-networks:
-  bridge:
-    driver: bridge
+      - ./inputFile:/csvserver/inputdata
+    ports:
+      - "9393:9300"
+    env_file:
+      - csvserver.env
